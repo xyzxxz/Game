@@ -1,21 +1,20 @@
-module;
+#pragma once
 
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <string_view>
 
-export module renderer;
-
-import game;
+#include "game.h"
 
 namespace renderer {
 
 // ---- 颜色 ----
-export struct Color {
+struct Color {
     uint8_t r, g, b, a;
 };
 
 // ---- 主题色板 ----
-export namespace Colors {
+namespace Colors {
     inline constexpr Color kBackground   { 0xFA, 0xF8, 0xEF, 0xFF };
     inline constexpr Color kBoardBg      { 0xBB, 0xAD, 0xA0, 0xFF };
     inline constexpr Color kTileDefault  { 0xCD, 0xC1, 0xB4, 0xFF };
@@ -24,18 +23,18 @@ export namespace Colors {
 }
 
 // ---- 菜单项描述 ----
-export struct MenuItem {
-    const char* label;
+struct MenuItem {
+    std::string_view label;
 };
 
 // ---- 棋盘渲染器 ----
-export class BoardRenderer {
+class BoardRenderer {
 public:
     BoardRenderer();
 
     // 渲染完整棋盘
     void render(SDL_Renderer* renderer, const game::Board& board,
-                int windowW, int windowH);
+                TTF_TextEngine* textEngine, TTF_Font* font);
 
     // 获取/设置动画相关
     bool isAnimating() const;
@@ -52,13 +51,13 @@ private:
 };
 
 // ---- 菜单渲染器 ----
-export class MenuRenderer {
+class MenuRenderer {
 public:
     MenuRenderer();
 
     // 渲染菜单界面
     void render(SDL_Renderer* renderer, int selectedIndex,
-                int windowW, int windowH);
+                TTF_TextEngine* textEngine, TTF_Font* font);
 
 private:
     static constexpr int kMenuItemCount = 2;
@@ -66,13 +65,14 @@ private:
 };
 
 // ---- HUD 渲染 (分数等) ----
-export class HUDRenderer {
+class HUDRenderer {
 public:
     HUDRenderer();
 
     // 渲染顶部 HUD
     void render(SDL_Renderer* renderer, const game::Game& game,
-                int windowW, int windowH);
+                TTF_TextEngine* textEngine, TTF_Font* font);
+
 };
 
 } // namespace renderer

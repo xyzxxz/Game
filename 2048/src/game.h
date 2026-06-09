@@ -1,26 +1,21 @@
-module;
+#pragma once
 
-#include <cstdint>
 #include <array>
 #include <random>
 #include <vector>
 
-export module game;
-
-// 所有类型已通过全局模块片段中的 #include 引入
-
 namespace game {
 
-// ---- 方向枚举 ----
-export enum class Direction {
+// 滑动方向
+enum class Direction {
     Up,
     Down,
     Left,
     Right
 };
 
-// ---- 游戏状态 ----
-export enum class GameState {
+// 游戏状态
+enum class GameState {
     Menu,
     Playing,
     Won,
@@ -28,41 +23,41 @@ export enum class GameState {
     Quit
 };
 
-// ---- 单个格子 ----
-export struct Tile {
-    int value;      // 0 表示空
+// 单个格子，value 为 0 表示空
+struct Tile {
+    int value;
 };
 
-// ---- 4x4 棋盘 ----
-export class Board {
+// 4x4 棋盘，核心游戏逻辑
+class Board {
 public:
     static constexpr int SIZE = 4;
 
     Board();
 
-    // 重置棋盘
+    // 重置棋盘为初始状态，生成两个方块
     void reset();
 
-    // 在空位随机生成一个新方块 (2 或 4)
+    // 在随机空位生成 2（90%）或 4（10%）
     void spawnTile();
 
-    // 向某个方向移动，返回是否发生移动
+    // 向指定方向移动，返回是否有方块移动
     bool move(Direction dir);
 
-    // 是否还能移动
+    // 判断是否还有合法移动
     bool canMove() const;
 
-    // 是否已达 2048
+    // 是否达到 2048
     bool hasWon() const;
 
-    // 获取格子值
+    // 访问格子
     int  getTile(int row, int col) const;
     void setTile(int row, int col, int value);
 
-    // 获取所有非空格子坐标
+    // 获取所有空位坐标
     std::vector<std::pair<int, int>> getEmptyTiles() const;
 
-    // 获取当前分数
+    // 当前分数
     int getScore() const;
 
 private:
@@ -70,12 +65,12 @@ private:
     std::mt19937 m_rng;
     int m_score;
 
-    bool slideRow(int row, Direction dir);
-    bool mergeRow(int row, Direction dir);
+    // 处理一行（4 个值），向索引 0 方向滑动 + 合并，返回是否变化
+    static bool processLine(int line[SIZE], int& scoreDelta);
 };
 
-// ---- 游戏主控 ----
-export class Game {
+// 游戏主控，管理游戏进程和状态切换
+class Game {
 public:
     Game();
 
