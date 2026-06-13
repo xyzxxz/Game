@@ -1,10 +1,7 @@
-#include "scene.hpp"
+#include "game.h"
 
-int main()
-{
-    Scene scene;
-    scene.init();
-    scene.newGame();
-    scene.play();
+int main(int argc, char* argv[]) {
+    Game game;
+    game.run();
     return 0;
 }

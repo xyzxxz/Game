@@ -6,11 +6,9 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(sudoku
     src/main.cpp
-    src/scene.cpp
-    src/input.cpp
     src/board.cpp
+    src/game.cpp
     src/renderer.cpp
-    src/board.cpp
 )
 
 set(SDL3_DIR "D:/Library/SDL3-3.4.10/cmake")
@@ -28,5 +26,8 @@ add_custom_command(TARGET sudoku POST_BUILD
         "$<TARGET_FILE_DIR:sudoku>"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "$<TARGET_FILE:SDL3_ttf::SDL3_ttf>"
+        "$<TARGET_FILE_DIR:sudoku>"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/font.ttf"
         "$<TARGET_FILE_DIR:sudoku>"
 )
