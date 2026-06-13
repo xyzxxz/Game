@@ -5,7 +5,7 @@ project(2048)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(2048
+add_executable(2048 WIN32
     src/main.cpp
     src/game.cpp
     src/renderer.cpp
@@ -32,4 +32,7 @@ add_custom_command(TARGET 2048 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "$<TARGET_FILE:SDL3_ttf::SDL3_ttf>"
         "$<TARGET_FILE_DIR:2048>"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/font.ttf"
+        "$<TARGET_FILE_DIR:2048>/font.ttf"
 )

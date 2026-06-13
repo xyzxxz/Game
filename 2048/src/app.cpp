@@ -1,6 +1,7 @@
 #include "app.h"
 #include <SDL3/SDL_log.h>
 #include <print>
+#include <string>
 
 namespace app {
 
@@ -42,8 +43,9 @@ int App::run()
         return 1;
     }
 
-    // 加载字体（需将 .ttf 文件放在 exe 同级目录）
-    m_font = TTF_OpenFont("font.ttf", 24);
+    // 加载字体 — 基于 exe 所在目录解析路径，避免双击运行时工作目录不一致
+    std::string fontPath = std::string(SDL_GetBasePath()) + "font.ttf";
+    m_font = TTF_OpenFont(fontPath.c_str(), 24);
     if (!m_font) {
         TTF_Quit();
         SDL_DestroyRenderer(m_renderer);
