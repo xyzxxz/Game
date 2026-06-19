@@ -23,7 +23,12 @@ bool Audio::Init() {
         return false;
     }
 
-    m_mixer = MIX_CreateMixer(nullptr);
+    SDL_AudioSpec spec{};
+    spec.format   = SDL_AUDIO_S16;
+    spec.channels = 2;
+    spec.freq     = 44100;
+
+    m_mixer = MIX_CreateMixer(&spec);
     if (!m_mixer) {
         SDL_Log("MIX_CreateMixer failed: %s", SDL_GetError());
         return false;
